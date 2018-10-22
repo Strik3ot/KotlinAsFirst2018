@@ -3,6 +3,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import lesson3.task1.minDivisor
 import kotlin.math.sqrt
 
 /**
@@ -16,7 +18,6 @@ fun sqRoots(y: Double) =
             y == 0.0 -> listOf(0.0)
             else -> {
                 val root = sqrt(y)
-                // Результат!
                 listOf(-root, root)
             }
         }
@@ -218,12 +219,12 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
  */
 fun factorize(n: Int): List<Int> {
     var nn = n
-    var minDivisor: Int
+    var currentMin: Int
     var result = listOf<Int>()
     while (nn > 1) {
-        minDivisor = minDivisor(nn)
-        result += minDivisor
-        nn /= minDivisor
+        currentMin = minDivisor(nn)
+        result += currentMin
+        nn /= currentMin
     }
     return result
 }
@@ -316,13 +317,13 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val listRoman = listOf(”I”, ”IV”, ”V”, ”IX”, ”X”, ”XL”,
-    ”L”, ”XC”, ”C”, ”CD”, ”D”, ”CM”, ”M”)
+    val listRoman = listOf("I", "IV”, ”V”, ”IX”, ”X”, ”XL”, " +
+            "L", "XC", "C", "CD", "D", "CM", "M")
     val listArabic = listOf(1, 4, 5, 9, 10, 40,
             50, 90, 100, 400, 500, 900, 1000)
     var number = n
-    var res = ””
-    if (number <= 0) return ””
+    var res = ""
+    if (number <= 0) return ""
     while (number > 0) {
         for (i in listArabic.size - 1 downTo 0) {
             if (number - listArabic[i] >= 0) {

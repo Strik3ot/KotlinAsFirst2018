@@ -2,6 +2,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.abs
 
 /**
  * Пример
@@ -46,21 +47,15 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean {
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    if (month == 1 && year in 0..2018) return 31
-    else while (month == 2){
-        if(year % 4 == 0) return 29
-        else return 28
+    when(month){
+        1, 3, 5, 7, 8, 10, 12 ->  return 31
+        4, 6, 9, 11 -> return 30
     }
-    if (month == 3 && year in 0..2018) return 31
-    if (month == 4 && year in 0..2018) return 30
-    if (month == 5 && year in 0..2018) return 31
-    if (month == 6 && year in 0..2018) return 30
-    if (month == 7 && year in 0..2018) return 31
-    if (month == 8 && year in 0..2018) return 31
-    if (month == 9 && year in 0..2018) return 30
-    if (month == 10 && year in 0..2018) return 31
-    if (month == 11 && year in 0..2018) return 30
-    if (month == 12 && year in 0..2018) return 31
+    if(year% 4 == 0 && month == 2 ){
+        return 28
+    } else {
+        return 29
+    }
 }
 /**
  * Средняя
@@ -85,8 +80,8 @@ fun circleInside(x1: Double, y1: Double, r1: Double,
  * Вернуть true, если кирпич пройдёт
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
-    if (r >= a and (s >= b or s >= c)) return true
-    else if (r >= b and (s >= c or s >= a)) return true
-    else if (r >= c and (s >= b or s >= a)) return true
+    if (r >= a && (s >= b || s >= c)) return true
+    else if (r >= b && (s >= c || s >= a)) return true
+    else if (r >= c && (s >= b || s >= a)) return true
     else return false
 }
