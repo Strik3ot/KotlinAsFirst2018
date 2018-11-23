@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson1.task1
 
 import kotlin.math.*
@@ -85,9 +86,9 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
-    val x = min/60
-    val y = sec/3600
-    return (x+y+grad)*PI/180
+    val x = min.toDouble() / 60
+    val y = sec.toDouble() / 3600
+    return (x + y + grad) * PI / 180
 }
 
 /**
@@ -99,8 +100,9 @@ fun angleInRadian(grad: Int, min: Int, sec: Int): Double {
 fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
     val x = x2 - x1
     val y = y2 - y1
-    return sqrt(x*x+y*y)
+    return sqrt(x * x + y * y)
 }
+
 /**
  * Простая
  *
@@ -109,7 +111,7 @@ fun trackLength(x1: Double, y1: Double, x2: Double, y2: Double): Double {
  */
 fun thirdDigit(number: Int): Int {
     val x = number % 1000
-    return x/100
+    return x / 100
 }
 
 
@@ -121,8 +123,8 @@ fun thirdDigit(number: Int): Int {
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
 fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
-    val x = hoursArrive*60 + minutesArrive
-    val y = hoursDepart*60 + minutesDepart
+    val x = hoursArrive * 60 + minutesArrive
+    val y = hoursDepart * 60 + minutesDepart
     return x - y
 }
 
@@ -135,7 +137,7 @@ fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minute
  * Например, 100 рублей под 10% годовых превратятся в 133.1 рубля
  */
 fun accountInThreeYears(initial: Int, percent: Int): Double {
-    val z = (1+percent*0.01)*(1+percent*0.01)*(1+percent*0.01)
+    val z = (1 + percent * 0.01) * (1 + percent * 0.01) * (1 + percent * 0.01)
     return initial * z
 }
 
@@ -145,9 +147,9 @@ fun accountInThreeYears(initial: Int, percent: Int): Double {
  * Пользователь задает целое трехзначное число (например, 478).
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
-fun numberRevert(number: Int): Int  {
-    val x = (number/100)
-    val y = (number-x*100)/10
-    val z = (number-10*y-100*x)
-    return 100*z + 10*y + x
+fun numberRevert(number: Int): Int {
+    val x = (number / 100)
+    val y = (number - x * 100) / 10
+    val z = (number - 10 * y - 100 * x)
+    return 100 * z + 10 * y + x
 }

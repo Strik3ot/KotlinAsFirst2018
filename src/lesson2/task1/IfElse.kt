@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task1
 
 import lesson1.task1.discriminant
@@ -119,14 +120,14 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int {
-    val c = ( kingY - bishopY ) / ( kingX - bishopX )
+    val c = (kingY - bishopY) / (kingX - bishopX)
     val b = Math.abs(c)
-    return when{
+    return when {
         kingX != rookX && kingY != rookY && b != 1 -> 0
-        ( kingX == rookX || kingY == rookY ) && ( b != 1 ) -> 1
-        b == 1 && ( kingX != rookX && kingY != rookY) -> 2
+        (kingX == rookX || kingY == rookY) && (b != 1) -> 1
+        b == 1 && (kingX != rookX && kingY != rookY) -> 2
         else -> 3
-}
+    }
 }
 
 /**
@@ -138,15 +139,15 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    val d = Math.max(a,b)
-    val y = Math.max(d,c)
-    val e = ( y * y )
-    val h = ( a + b + c - y)*( a + b + c - y)
+    val d = Math.max(a, b)
+    val y = Math.max(d, c)
+    val e = (y * y)
+    val h = (a + b + c - y) * (a + b + c - y)
     val x = 2 * a * b * c / y
-    return if( ( h - x < e ) && ( a + b + c > 2 * y)) 2
-    else if ( ( h - x > e ) && ( a + b + c > 2 * y )) 0
-    else if( ( h - x == e ) && ( a + b + c > 2 * y)) 1
-    else  -1
+    return if ((h - x < e) && (a + b + c > 2 * y)) 2
+    else if ((h - x > e) && (a + b + c > 2 * y)) 0
+    else if ((h - x == e) && (a + b + c > 2 * y)) 1
+    else -1
 
 }
 
@@ -159,15 +160,15 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return if (( a <= c ) && ( c < b) && ( b <= d)) {
+    return if ((a <= c) && (c < b) && (b <= d)) {
         b - c
-    }else if ( ( a == d ) || ( b == c ) ){
+    } else if ((a == d) || (b == c)) {
         0
-    } else if ( ( c <= a )&& ( b <= d ) ) {
+    } else if ((c <= a) && (b <= d)) {
         b - a
-    }else if ( ( a <= c ) && ( d <= b )){
+    } else if ((a <= c) && (d <= b)) {
         d - c
-    }else if ( ( c <= a ) && ( a < d ) && ( d <= b )){
+    } else if ((c <= a) && (a < d) && (d <= b)) {
         d - a
-    }else -1
+    } else -1
 }

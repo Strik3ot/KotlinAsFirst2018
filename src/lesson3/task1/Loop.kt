@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson3.task1
 
 import kotlin.math.sqrt
@@ -38,7 +39,7 @@ fun isPrime(n: Int): Boolean {
  */
 fun isPerfect(n: Int): Boolean {
     var sum = 1
-    for (m in 2..n/2) {
+    for (m in 2..n / 2) {
         if (n % m > 0) continue
         sum += m
         if (sum > n) break
@@ -78,6 +79,7 @@ fun digitNumber(n: Int): Int {
         return result
     }
 }
+
 /**
  * Простая
  *
@@ -89,7 +91,7 @@ fun fib(n: Int): Int {
     var fib1: Int = 1
     var fib2: Int = 1
     var fin3: Int = 0
-    for (i in 3..n){
+    for (i in 3..n) {
         fin3 = fib2 + fib1
         fib1 = fib2
         fib2 = fin3
@@ -115,6 +117,7 @@ fun lcm(m: Int, n: Int): Int {
     val count = num_m + num_n
     return multiplication / count
 }
+
 /**
  * Простая
  *
@@ -144,6 +147,7 @@ fun isCoPrime(m: Int, n: Int): Boolean {
     }
     return k != 0
 }
+
 /**
  * Простая
  *
@@ -160,6 +164,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
     }
     return false
 }
+
 /**
  * Средняя
  *
@@ -176,7 +181,19 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Написать функцию, которая находит, сколько шагов требуется для
  * этого для какого-либо начального X > 0.
  */
-fun collatzSteps(x: Int): Int = TODO()
+fun collatzSteps(x: Int): Int {
+    var i = 0
+    var internalX = x
+    loop@ while (x > 1) {
+        when {
+            internalX == 1 -> break@loop
+            internalX % 2 == 0 -> internalX /= 2
+            else -> internalX = internalX * 3 + 1
+        }
+        i++
+    }
+    return i
+}
 
 /**
  * Средняя
@@ -197,6 +214,7 @@ fun sin(x: Double, eps: Double): Double {
     }
     return sin
 }
+
 /**
  * Средняя
  *
@@ -222,6 +240,7 @@ fun revert(n: Int): Int {
     } while (num > 0)
     return m
 }
+
 /**
  * Средняя
  *
@@ -239,8 +258,9 @@ fun isPalindrome(n: Int): Boolean {
         a = a * 10 + m % 10
         m /= 10
     }
-    if (a == n) return true else return false
+    return a == n
 }
+
 /**
  * Средняя
  *

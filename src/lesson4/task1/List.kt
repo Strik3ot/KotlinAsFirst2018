@@ -125,6 +125,7 @@ fun abs(v: List<Double>): Double {
     val abs = Math.sqrt(absWithoutSqrt)
     return abs
 }
+
 /**
  * Простая
  *
@@ -153,6 +154,7 @@ fun center(list: MutableList<Double>): MutableList<Double> {
     }
     return list
 }
+
 /**
  * Средняя
  *
@@ -170,6 +172,7 @@ fun times(a: List<Double>, b: List<Double>): Double {
         return c
     } else return 0.0
 }
+
 /**
  * Средняя
  *
@@ -210,6 +213,7 @@ fun accumulate(list: MutableList<Double>): MutableList<Double> {
     }
     return list
 }
+
 /**
  * Средняя
  *
@@ -228,6 +232,7 @@ fun factorize(n: Int): List<Int> {
     }
     return result
 }
+
 /**
  * Сложная
  *
@@ -279,6 +284,7 @@ fun convertToString(n: Int, base: Int): String {
     }
     return result
 }
+
 /**
  * Средняя
  *
@@ -308,6 +314,7 @@ fun decimalFromString(str: String, base: Int): Int {
     }
     return decimal(res, base)
 }
+
 /**
  * Сложная
  *
@@ -335,6 +342,7 @@ fun roman(n: Int): String {
     }
     return res
 }
+
 /**
  * Очень сложная
  *
