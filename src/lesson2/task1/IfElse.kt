@@ -84,9 +84,11 @@ fun timeForHalfWay(t1: Double, v1: Double,
     val s2 = v2 * t2
     val s3 = v3 * t3
     val h = (s1 + s2 + s3) / 2
-    return if (h <= s1) h / v1
-    else if ((h > s1) and (h <= s1 + s2)) t1 + ((h - s1) / v2)
-    else t1 + t2 + ((h - s1 - s2) / v3)
+    return when {
+        h <= s1 -> h / v1
+        (h > s1) and (h <= s1 + s2) -> t1 + ((h - s1) / v2)
+        else -> t1 + t2 + ((h - s1 - s2) / v3)
+    }
 }
 
 /**
@@ -101,10 +103,12 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
-    return if (((kingX != rookX1) && (kingY != rookY1)) && ((kingX != rookX2) && (kingY != rookY2))) 0
-    else if (((kingX == rookX1) || (kingY == rookY1)) && ((kingX != rookX2) && (kingY != rookY2))) 1
-    else if (((kingX != rookX1) && (kingY != rookY1)) && ((kingX == rookX2) || (kingY == rookY2))) 2
-    else 3
+    return when {
+        ((kingX != rookX1) && (kingY != rookY1)) && ((kingX != rookX2) && (kingY != rookY2)) -> 0
+        ((kingX == rookX1) || (kingY == rookY1)) && ((kingX != rookX2) && (kingY != rookY2)) -> 1
+        ((kingX != rookX1) && (kingY != rookY1)) && ((kingX == rookX2) || (kingY == rookY2)) -> 2
+        else -> 3
+    }
 }
 
 /**
@@ -144,10 +148,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val e = (y * y)
     val h = (a + b + c - y) * (a + b + c - y)
     val x = 2 * a * b * c / y
-    return if ((h - x < e) && (a + b + c > 2 * y)) 2
-    else if ((h - x > e) && (a + b + c > 2 * y)) 0
-    else if ((h - x == e) && (a + b + c > 2 * y)) 1
-    else -1
+    return when {
+        (h - x < e) && (a + b + c > 2 * y) -> 2
+        (h - x > e) && (a + b + c > 2 * y) -> 0
+        (h - x == e) && (a + b + c > 2 * y) -> 1
+        else -> -1
+    }
 
 }
 
@@ -160,15 +166,12 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int {
-    return if ((a <= c) && (c < b) && (b <= d)) {
-        b - c
-    } else if ((a == d) || (b == c)) {
-        0
-    } else if ((c <= a) && (b <= d)) {
-        b - a
-    } else if ((a <= c) && (d <= b)) {
-        d - c
-    } else if ((c <= a) && (a < d) && (d <= b)) {
-        d - a
-    } else -1
+    return when {
+        (a <= c) && (c < b) && (b <= d) -> b - c
+        a == d || b == c -> 0
+        (c <= a) && (b <= d) -> b - a
+        (a <= c) && (d <= b) -> d - c
+        (c <= a) && (a < d) && (d <= b) -> d - a
+        else -> -1
+    }
 }

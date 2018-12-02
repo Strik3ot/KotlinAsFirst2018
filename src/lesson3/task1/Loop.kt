@@ -88,9 +88,9 @@ fun digitNumber(n: Int): Int {
  */
 fun fib(n: Int): Int {
     if (n in 1..2) return 1
-    var fib1: Int = 1
-    var fib2: Int = 1
-    var fin3: Int = 0
+    var fib1 = 1
+    var fib2 = 1
+    var fin3 = 0
     for (i in 3..n) {
         fin3 = fib2 + fib1
         fib1 = fib2
@@ -107,14 +107,14 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var num_m = m
-    var num_n = n
-    val multiplication = (num_m * num_n)
-    while ((num_m != 0) && (num_n != 0)) {
-        if (num_m > num_n) num_m %= num_n
-        else num_n %= num_m
+    var nummm = m
+    var numnn = n
+    val multiplication = (nummm * numnn)
+    while ((nummm != 0) && (numnn != 0)) {
+        if (nummm > numnn) nummm %= numnn
+        else numnn %= nummm
     }
-    val count = num_m + num_n
+    val count = nummm + numnn
     return multiplication / count
 }
 
