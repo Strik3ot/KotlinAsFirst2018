@@ -3,6 +3,7 @@
 package lesson5.task1
 
 import lesson4.task1.mean
+import java.lang.Integer.max
 
 
 /**
@@ -298,4 +299,33 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
+val ans = mutableSetOf<String>()
+
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    val treasuresWithoutTooBig = treasures.filter { it.value.first <= capacity }.toList().sortedBy { it.second.first.toDouble() / it.second.second.toDouble() }
+    val dynamic = Array(treasuresWithoutTooBig.size + 1) { _ -> Array(capacity + 1) { 0 } }
+    for (amountIndex in 1..treasuresWithoutTooBig.size)
+        for (sizeIndex in 1..capacity)
+            dynamic[amountIndex][sizeIndex] =
+                    if (sizeIndex >= treasuresWithoutTooBig[amountIndex - 1].second.first)
+                        max(dynamic[amountIndex - 1][sizeIndex],
+                                dynamic[amountIndex - 1][sizeIndex - treasuresWithoutTooBig[amountIndex - 1].second.first]
+                                        + treasuresWithoutTooBig[amountIndex - 1].second.second)
+                    else dynamic[amountIndex - 1][sizeIndex]
+    ans.clear()
+    findAns(dynamic, treasuresWithoutTooBig.size, capacity, treasuresWithoutTooBig)
+    return ans
+}
+
+fun findAns(dynamic: Array<Array<Int>>, amountIndex: Int, sizeIndex: Int, treasures: List<Pair<String, Pair<Int, Int>>>) {
+    if (dynamic[amountIndex][sizeIndex] == 0)
+        return
+    if (dynamic[amountIndex - 1][sizeIndex] == dynamic[amountIndex][sizeIndex])
+        findAns(dynamic, amountIndex - 1, sizeIndex, treasures)
+    else {
+        findAns(dynamic, amountIndex - 1, sizeIndex - treasures[amountIndex - 1].second.first, treasures)
+        ans.add(treasures[amountIndex - 1].first)
+    }
+}
+
+

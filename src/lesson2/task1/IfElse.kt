@@ -3,6 +3,7 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.sqrt
 
@@ -103,11 +104,13 @@ fun timeForHalfWay(t1: Double, v1: Double,
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
                        rookX2: Int, rookY2: Int): Int {
+    val first = kingX == rookX1 || kingY == rookY1
+    val second = kingX == rookX2 || kingY == rookY2
     return when {
-        ((kingX != rookX1) && (kingY != rookY1)) && ((kingX != rookX2) && (kingY != rookY2)) -> 0
-        ((kingX == rookX1) || (kingY == rookY1)) && ((kingX != rookX2) && (kingY != rookY2)) -> 1
-        ((kingX != rookX1) && (kingY != rookY1)) && ((kingX == rookX2) || (kingY == rookY2)) -> 2
-        else -> 3
+        first && second -> 3
+        first -> 1
+        second -> 2
+        else -> 0
     }
 }
 
@@ -124,13 +127,13 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
                           bishopX: Int, bishopY: Int): Int {
-    val c = (kingY - bishopY) / (kingX - bishopX)
-    val b = Math.abs(c)
+    val b = abs(kingX - bishopX) == abs(kingY - bishopY)
+    val c = (kingX == rookX) || (kingY == rookY)
     return when {
-        kingX != rookX && kingY != rookY && b != 1 -> 0
-        (kingX == rookX || kingY == rookY) && (b != 1) -> 1
-        b == 1 && (kingX != rookX && kingY != rookY) -> 2
-        else -> 3
+        b && c -> 3
+        c -> 1
+        b -> 2
+        else -> 0
     }
 }
 
