@@ -319,7 +319,8 @@ fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<Strin
     }.toList().sortedBy {
         it.second.first.toDouble() / it.second.second.toDouble()
     }
-    val arrayTreasuresWithoutTooBig = Array(treasuresWithoutTooBig.size + 1) { _ -> Array(capacity + 1) { 0 } }
+    val arrayTreasuresWithoutTooBig = Array(treasuresWithoutTooBig.size + 1) { _ ->
+        Array(capacity + 1) { 0 } }
     for (amountIndex in 1..treasuresWithoutTooBig.size) {
         for (sizeIndex in 1..capacity) {
             arrayTreasuresWithoutTooBig[amountIndex][sizeIndex] =
@@ -343,7 +344,8 @@ List<Pair<String, Pair<Int, Int>>>) {
     if (arrayTreasuresWithoutTooBig[amountIndex - 1][sizeIndex] == arrayTreasuresWithoutTooBig[amountIndex][sizeIndex])
         findAns(arrayTreasuresWithoutTooBig, amountIndex - 1, sizeIndex, treasures)
     else {
-        findAns(arrayTreasuresWithoutTooBig, amountIndex - 1, sizeIndex - treasures[amountIndex - 1].second.first, treasures)
+        findAns(arrayTreasuresWithoutTooBig, amountIndex - 1,
+                sizeIndex - treasures[amountIndex - 1].second.first, treasures)
         ans.add(treasures[amountIndex - 1].first)
     }
 }
