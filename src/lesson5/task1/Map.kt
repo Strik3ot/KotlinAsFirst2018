@@ -99,7 +99,9 @@ fun buildWordSet(text: List<String>): MutableSet<String> {
  *   ) -> mapOf("Emergency" to "112, 911", "Police" to "02")
  */
 fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<String, String> =
-        mapA.toList().plus(mapB.toList()).groupBy({ it.first }, { it.second }).mapValues { theIt -> theIt.value.distinctBy { it }.joinToString() }
+        mapA.toList().plus(mapB.toList()).groupBy({ it.first }, { it.second }).mapValues { theIt ->
+            theIt.value.distinctBy { it }.joinToString()
+        }
 
 /**
  * Простая
@@ -111,8 +113,13 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *   buildGrades(mapOf("Марат" to 3, "Семён" to 5, "Михаил" to 5))
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
+
 fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> =
-        grades.toList().groupBy({ it.second }, { it.first }).toSortedMap(compareBy { it }).mapValues { it.value.sortedDescending() }
+        grades.toList().groupBy({
+            it.second
+        }, { it.first }).toSortedMap(compareBy { it }).mapValues {
+            it.value.sortedDescending()
+        }
 
 /**
  * Простая
@@ -181,17 +188,20 @@ fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): S
  *          "Mikhail" to setOf("Sveta", "Marat")
  *        )
  */
-fun haveCommonFriends(name1: String, name2: String, list: Map<String, Set<String>>) = list[name1]!!.any { list[it]!!.contains(name2) }
+fun haveCommonFriends(name1: String, name2: String, list: Map<String, Set<String>>) =
+        list[name1]!!.any { list[it]!!.contains(name2) }
 
 fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<String>> {
     val listOfAllPeople = friends.flatMap { it.value + it.key }.distinct()
-    val peopleAndFriends = listOfAllPeople.associate { it -> it to if (friends.contains(it)) friends[it] else emptySet() }.toMutableMap()
+    val peopleAndFriends = listOfAllPeople.associate { it ->
+        it to if (friends.contains(it)) friends[it] else emptySet()
+    }.toMutableMap()
     do {
-        val peopleAndFriendsBefore = peopleAndFriends
         var changed = false
-        for ((person, _) in peopleAndFriendsBefore)
+        for ((person, _) in peopleAndFriends)
             for (probableFriend in listOfAllPeople)
-                if (haveCommonFriends(person, probableFriend, peopleAndFriendsBefore as Map<String, Set<String>>) && probableFriend != person)
+                if (haveCommonFriends(person, probableFriend, peopleAndFriends as Map<String, Set<String>>)
+                        && probableFriend != person)
                     if (peopleAndFriends[person] != peopleAndFriends[person].orEmpty().plus(probableFriend)) {
                         peopleAndFriends[person] = peopleAndFriends[person].orEmpty().plus(probableFriend)
                         changed = true
@@ -259,7 +269,9 @@ fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
  * Например:
  *   hasAnagrams(listOf("тор", "свет", "рот")) -> true
  */
-fun hasAnagrams(words: List<String>): Boolean = words.map { theIt -> theIt.map { "$it" }.sorted() }.distinct().size != words.size
+fun hasAnagrams(words: List<String>): Boolean = words.map { theIt ->
+    theIt.map { "$it" }.sorted()
+}.distinct().size != words.size
 
 /**
  * Сложная
@@ -299,31 +311,39 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *     450
  *   ) -> emptySet()
  */
-val ans = mutableSetOf<String>()
+var ans = mutableSetOf<String>()
 
 fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
-    val treasuresWithoutTooBig = treasures.filter { it.value.first <= capacity }.toList().sortedBy { it.second.first.toDouble() / it.second.second.toDouble() }
-    val dynamic = Array(treasuresWithoutTooBig.size + 1) { _ -> Array(capacity + 1) { 0 } }
-    for (amountIndex in 1..treasuresWithoutTooBig.size)
-        for (sizeIndex in 1..capacity)
-            dynamic[amountIndex][sizeIndex] =
+    val treasuresWithoutTooBig = treasures.filter {
+        it.value.first <= capacity
+    }.toList().sortedBy {
+        it.second.first.toDouble() / it.second.second.toDouble()
+    }
+    val arrayTreasuresWithoutTooBig = Array(treasuresWithoutTooBig.size + 1) { _ -> Array(capacity + 1) { 0 } }
+    for (amountIndex in 1..treasuresWithoutTooBig.size) {
+        for (sizeIndex in 1..capacity) {
+            arrayTreasuresWithoutTooBig[amountIndex][sizeIndex] =
                     if (sizeIndex >= treasuresWithoutTooBig[amountIndex - 1].second.first)
-                        max(dynamic[amountIndex - 1][sizeIndex],
-                                dynamic[amountIndex - 1][sizeIndex - treasuresWithoutTooBig[amountIndex - 1].second.first]
+                        max(arrayTreasuresWithoutTooBig[amountIndex - 1][sizeIndex],
+                                arrayTreasuresWithoutTooBig[amountIndex - 1][sizeIndex -
+                                        treasuresWithoutTooBig[amountIndex - 1].second.first]
                                         + treasuresWithoutTooBig[amountIndex - 1].second.second)
-                    else dynamic[amountIndex - 1][sizeIndex]
+                    else arrayTreasuresWithoutTooBig[amountIndex - 1][sizeIndex]
+        }
+    }
     ans.clear()
-    findAns(dynamic, treasuresWithoutTooBig.size, capacity, treasuresWithoutTooBig)
+    findAns(arrayTreasuresWithoutTooBig, treasuresWithoutTooBig.size, capacity, treasuresWithoutTooBig)
     return ans
 }
 
-fun findAns(dynamic: Array<Array<Int>>, amountIndex: Int, sizeIndex: Int, treasures: List<Pair<String, Pair<Int, Int>>>) {
-    if (dynamic[amountIndex][sizeIndex] == 0)
+fun findAns(arrayTreasuresWithoutTooBig: Array<Array<Int>>, amountIndex: Int, sizeIndex: Int, treasures:
+List<Pair<String, Pair<Int, Int>>>) {
+    if (arrayTreasuresWithoutTooBig[amountIndex][sizeIndex] == 0)
         return
-    if (dynamic[amountIndex - 1][sizeIndex] == dynamic[amountIndex][sizeIndex])
-        findAns(dynamic, amountIndex - 1, sizeIndex, treasures)
+    if (arrayTreasuresWithoutTooBig[amountIndex - 1][sizeIndex] == arrayTreasuresWithoutTooBig[amountIndex][sizeIndex])
+        findAns(arrayTreasuresWithoutTooBig, amountIndex - 1, sizeIndex, treasures)
     else {
-        findAns(dynamic, amountIndex - 1, sizeIndex - treasures[amountIndex - 1].second.first, treasures)
+        findAns(arrayTreasuresWithoutTooBig, amountIndex - 1, sizeIndex - treasures[amountIndex - 1].second.first, treasures)
         ans.add(treasures[amountIndex - 1].first)
     }
 }

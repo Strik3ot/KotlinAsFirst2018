@@ -122,8 +122,7 @@ fun abs(v: List<Double>): Double {
         val ex = sqr(element)
         absWithoutSqrt += ex
     }
-    val abs = Math.sqrt(absWithoutSqrt)
-    return abs
+    return Math.sqrt(absWithoutSqrt)
 }
 
 /**
@@ -135,7 +134,6 @@ fun mean(list: List<Double>): Double {
     val k = list.size
     val sum = list.sum()
     if (k == 0) return 0.0
-    if (k == 1) return sum
     else return sum / k
 }
 
@@ -166,8 +164,7 @@ fun times(a: List<Double>, b: List<Double>): Double {
     var c = 0.0
     return if (a.size == b.size) {
         for (i in 0..(a.size - 1)) {
-            val multiplication = a[i] * b[i]
-            c += multiplication
+            c += a[i] * b[i]
         }
         c
     } else 0.0
@@ -240,10 +237,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    val result = factorize(n)
-    return result.joinToString(separator = "*")
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 /**
  * Средняя
@@ -305,7 +299,7 @@ fun decimal(digits: List<Int>, base: Int): Int = TODO()
  */
 fun decimalFromString(str: String, base: Int): Int {
     var res = listOf<Int>()
-    for (i in 0..str.length - 1) {
+    for (i in 0 until str.length) {
         if (str[i].toInt() <= '9'.hashCode()) {
             res += str[i].hashCode() - '0'.hashCode()
         } else {
@@ -314,6 +308,7 @@ fun decimalFromString(str: String, base: Int): Int {
     }
     return decimal(res, base)
 }
+
 
 /**
  * Сложная
@@ -324,10 +319,8 @@ fun decimalFromString(str: String, base: Int): Int {
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val listRoman = listOf("I", "IV”, ”V”, ”IX”, ”X”, ”XL”, " +
-            "L", "XC", "C", "CD", "D", "CM", "M")
-    val listArabic = listOf(1, 4, 5, 9, 10, 40,
-            50, 90, 100, 400, 500, 900, 1000)
+    val listRoman = listOf("I", "IV", "V", "IX", "X", "XL", "L", "XC", "C", "CD", "D", "CM", "M")
+    val listArabic = listOf(1, 4, 5, 9, 10, 40, 50, 90, 100, 400, 500, 900, 1000)
     var number = n
     var res = ""
     if (number <= 0) return ""
