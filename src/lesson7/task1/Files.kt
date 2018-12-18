@@ -54,8 +54,19 @@ fun alignFile(inputName: String, lineLength: Int, outputName: String) {
  * Регистр букв игнорировать, то есть буквы е и Е считать одинаковыми.
  *
  */
-fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> = TODO()
-
+fun countSubstrings(inputName: String, substrings: List<String>): Map<String, Int> {
+    val inputFile = File(inputName).bufferedReader().readLines().joinToString("\n").toLowerCase()
+    val resultMap = mutableMapOf<String, Int>()
+    substrings.forEach {
+        resultMap[it] = 0
+        var r = Regex(it.toLowerCase()).find(inputFile)
+        while (r != null) {
+            resultMap[it] = (resultMap[it] ?: 0) + 1
+            r = Regex(it.toLowerCase()).find(inputFile, r.range.first + 1)
+        }
+    }
+    return resultMap
+}
 
 /**
  * Средняя
@@ -71,7 +82,25 @@ fun countSubstrings(inputName: String, substrings: List<String>): Map<String, In
  *
  */
 fun sibilants(inputName: String, outputName: String) {
-    TODO()
+    val outputFile = File(outputName).bufferedWriter()
+    File(inputName).bufferedReader().readLines().forEach {
+        var abc = ""
+        for (a in it) {
+            val str =
+                    if (Regex("""[жчшщ][ыяю]""", RegexOption.IGNORE_CASE).matches(abc + a))
+                        when (a.toLowerCase()) {
+                            'ы' -> a - 19
+                            'я' -> a - 31
+                            'ю' -> a - 11
+                            else -> throw IllegalArgumentException()
+                        }
+                    else a
+            outputFile.write(str.toString())
+            abc = a.toString()
+        }
+        outputFile.newLine()
+    }
+    outputFile.close()
 }
 
 /**
@@ -92,7 +121,7 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+
 }
 
 /**
@@ -144,7 +173,14 @@ fun alignFileByWidth(inputName: String, outputName: String) {
  * Ключи в ассоциативном массиве должны быть в нижнем регистре.
  *
  */
-fun top20Words(inputName: String): Map<String, Int> = TODO()
+fun top20Words(inputName: String): Map<String, Int> {
+    val inputFile = File(inputName).bufferedReader().readLines()
+    val resultMap = mutableMapOf<String, Int>()
+    if (inputFile.isNotEmpty())
+        inputFile.joinToString(" ").toLowerCase().split(Regex("""[^a-zA-Zа-яА-ЯёЁ]+"""))
+                .forEach { resultMap[it] = (resultMap[it] ?: 0) + 1 }
+    return resultMap.toList().sortedByDescending { it.second }.take(20).toMap()
+}
 
 /**
  * Средняя
