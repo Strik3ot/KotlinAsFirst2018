@@ -3,7 +3,6 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
-import javax.xml.datatype.DatatypeConstants.MONTHS
 
 /**
  * Пример
@@ -72,30 +71,17 @@ fun main(args: Array<String>) {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-
-val MONTHS = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
-
-fun spl(str: String) = str.split(delimiters = *arrayOf(" "))
-fun splDot(str: String) = str.split(delimiters = *arrayOf("."))
-fun good(str: String) = str.replace(Regex("""[^\d+)(]"""), "")
-
 fun dateStrToDigit(str: String): String {
-    val splStr = spl(str).toMutableList()
-    if (splStr.size != 3 ||
-            splStr[1] !in lesson6.task1.MONTHS ||
-            splStr[0].toIntOrNull() == null ||
-            splStr[2].toIntOrNull() == null ||
-            splStr[2].toInt() < 0 ||
-            splStr[0].toInt() !in 1..daysInMonth(lesson6.task1.MONTHS.indexOf(splStr[1]) + 1, splStr[2].toInt()))
-        return ""
-    else {
-        if (splStr[0].length < 2)
-            splStr[0] = "0" + splStr[0]
-        splStr[1] = (lesson6.task1.MONTHS.indexOf(splStr[1]) + 1).toString()
-        if (splStr[1].length < 2)
-            splStr[1] = "0" + splStr[1]
-        return splStr.joinToString(separator = ".")
-    }
+    val month: String
+    val monthNumber: Int
+    val parts = str.split(" ").toList()
+    val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря")
+    if (parts.size == 3) month = parts[1] else return ""
+    if (months.toSet().indexOf(month) == -1) return ""
+    else monthNumber = months.toSet().indexOf(month) + 1
+    if (parts[0].toInt() > daysInMonth(monthNumber, parts[2].toInt())) return ""
+    return String.format("%02d.%02d.%d", parts[0].toInt(), monthNumber, parts[2].toInt())
 }
 
 /**
@@ -108,23 +94,7 @@ fun dateStrToDigit(str: String): String {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String {
-    val splDig = splDot(digital).toMutableList()
-    if (splDig.size != 3 ||
-            splDig[0].toIntOrNull() == null ||
-            splDig[1].toIntOrNull() == null ||
-            splDig[2].toIntOrNull() == null ||
-            splDig[2].toInt() < 0 ||
-            splDig[1].toInt() !in 1..12 ||
-            splDig[0].toInt() !in 1..daysInMonth(splDig[1].toInt(), splDig[2].toInt()))
-        return ""
-    else {
-        if (splDig[0].startsWith("0"))
-            splDig[0] = splDig[0].substring(1)
-        splDig[1] = lesson6.task1.MONTHS[splDig[1].toInt() - 1]
-        return splDig.joinToString(separator = " ")
-    }
-}
+fun dateDigitToStr(digital: String): String = TODO()
 
 /**
  * Средняя
@@ -138,17 +108,17 @@ fun dateDigitToStr(digital: String): String {
  * Все символы в номере, кроме цифр, пробелов и +-(), считать недопустимыми.
  * При неверном формате вернуть пустую строку
  */
-fun flattenPhoneNumber(phone: String): String =
-        if (!phone.dropWhile { it in listOf(' ', '-') }.matches(Regex("""(^[+\d-][\d\s-]*\(?[\d\s-]*\)?[\d\s-]*[\d-]$)|(\d)""")) ||
-                phone.indexOf(')') < phone.indexOf('(') ||
-                good(phone).indexOf('(')
-                - good(phone).indexOf('+') == 1 ||
-                good(phone).indexOf(')')
-                - good(phone).indexOf('(') == 1)
-            ""
-        else
-            phone.replace(Regex("""[^+\d]"""), "")
-
+fun flattenPhoneNumber(phone: String): String {
+    var i = 0
+    val res = phone.filter {
+        it !in listOf('a'..'z', '(', ')', '-', '_', ' ')
+    }
+    res.forEach {
+        if (it in '0'..'9' || phone.startsWith('+')) i++
+    }
+    return if (i == res.length) res
+    else ""
+}
 
 /**
  * Средняя
@@ -161,12 +131,7 @@ fun flattenPhoneNumber(phone: String): String =
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 
-fun bestLongJump(jumps: String): Int =
-        if (!jumps.matches(Regex("""([\d-%][\d\s%-]*[\d-%]$)|(\d)""")) ||
-                spl(jumps).none { it.toIntOrNull() != null })
-            -1
-        else
-            spl(jumps).filter { it.toIntOrNull() != null }.maxBy { it.toInt() }!!.toInt()
+fun bestLongJump(jumps: String): Int = TODO()
 
 /**
  * Сложная
@@ -178,20 +143,7 @@ fun bestLongJump(jumps: String): Int =
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int {
-    val splitJumps = spl(jumps)
-    if (!jumps.matches(Regex("""^\d[\d\s+%-]*[+%-]$""")) ||
-            splitJumps.size % 2 != 0 ||
-            splitJumps.isEmpty())
-        return -1
-    val successfulJumps = mutableListOf<Int>()
-    for (i in 0..splitJumps.size - 2 step 2) {
-        if (splitJumps[i].contains(Regex("""\D""")) ||
-                splitJumps[i + 1].contains(Regex("""[^-%+]"""))) return -1
-        if (splitJumps[i + 1].contains('+')) successfulJumps.add(splitJumps[i].toInt())
-    }
-    return if (successfulJumps.isNotEmpty()) successfulJumps.max()!! else -1
-}
+fun bestHighJump(jumps: String): Int = TODO()
 
 /**
  * Сложная
@@ -202,24 +154,7 @@ fun bestHighJump(jumps: String): Int {
  * Вернуть значение выражения (6 для примера).
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
-fun plusMinus(expression: String): Int {
-    val split = spl(expression)
-    if (!expression.matches(Regex("""(^\d[\d\s+-]+\d$)|(\d)""")) ||
-            split.size % 2 == 0 ||
-            split[0].toIntOrNull() == null ||
-            split[0].toInt() < 0)
-        throw IllegalArgumentException("Incorrect input format")
-    var answer = spl(expression)[0].toInt()
-    for (i in 0 until split.size - 2 step 2) {
-        if (split[i + 2].toIntOrNull() == null || split[i + 2].toInt() < 0 || split[i + 1] !in listOf("+", "-"))
-            throw IllegalArgumentException("Incorrect input format")
-        answer += if (split[i + 1] == "+")
-            split[i + 2].toInt()
-        else
-            -split[i + 2].toInt()
-    }
-    return answer
-}
+fun plusMinus(expression: String): Int = TODO()
 
 /**
  * Сложная
@@ -230,17 +165,7 @@ fun plusMinus(expression: String): Int {
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int {
-    val strSplit = spl(str.toLowerCase())
-    var answer = 0
-    if (strSplit.size != 1)
-        for (i in 0 until strSplit.size - 1) {
-            if (strSplit[i + 1] == strSplit[i])
-                return answer
-            answer += strSplit[i].length + 1
-        }
-    return -1
-}
+fun firstDuplicateIndex(str: String): Int = TODO()
 
 /**
  * Сложная
