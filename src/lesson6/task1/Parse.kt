@@ -3,6 +3,7 @@
 package lesson6.task1
 
 import lesson2.task2.daysInMonth
+import kotlin.math.max
 
 /**
  * Пример
@@ -94,7 +95,14 @@ fun dateStrToDigit(str: String): String {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val parts = digital.split("[^0-9]".toRegex()).toList()
+    val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря")
+    return if (parts.size == 3 && daysInMonth(parts[1].toInt(), parts[2].toInt()) > parts[0].toInt() && parts[1].toInt() > 0)
+        String.format("%d %s %d", parts[0].toInt(), months[parts[1].toInt() - 1], parts[2].toInt())
+    else ""
+}
 
 /**
  * Средняя
@@ -131,7 +139,19 @@ fun flattenPhoneNumber(phone: String): String {
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
 
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    if (jumps.contains(Regex("[~!@#\$^&*+]"))) return -1
+    val a = jumps.split("[^0-9]".toRegex())
+    val res = mutableListOf<Int>()
+    for (jump in a) {
+        try {
+            res.add(jump.toInt())
+        } catch (e: NumberFormatException) {
+            res.add(-1)
+        }
+    }
+    return res.max()!!
+}
 
 /**
  * Сложная
@@ -143,7 +163,23 @@ fun bestLongJump(jumps: String): Int = TODO()
  * Прочитать строку и вернуть максимальную взятую высоту (230 в примере).
  * При нарушении формата входной строки вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    if (jumps.contains(Regex("[?!._=]"))) return -1
+    val a = jumps.split("%", "-")
+    val res = mutableListOf<Int>()
+    for (jump in a) {
+        if (jump.contains("+")) {
+            if (jump.contains(Regex("\\s+[+]+\\s+\\d+"))) {
+                val c = jump.split(Regex("\\s+[+]+\\s+\\d+"))
+                res.add(c.joinToString().filter { it !in ", " }.toInt())
+            } else {
+                val b = jump.split("+")
+                res.add(b.joinToString().filter { it !in ", " }.toInt())
+            }
+        }
+    }
+    return res.max() ?: -1
+}
 
 /**
  * Сложная
@@ -165,7 +201,16 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val a = str.toLowerCase().split(" ")
+    var res = 0
+    for (i in 0..a.size - 2) {
+        if (a[i] == a[i + 1]) {
+            return res
+        } else res += a[i].length + 1
+    }
+    return -1
+}
 
 /**
  * Сложная
@@ -179,6 +224,7 @@ fun firstDuplicateIndex(str: String): Int = TODO()
  * Все цены должны быть больше либо равны нуля.
  */
 fun mostExpensive(description: String): String = TODO()
+
 
 /**
  * Сложная

@@ -118,7 +118,21 @@ fun <E> rotate(matrix: Matrix<E>): Matrix<E> = TODO()
  * 1 2 3
  * 3 1 2
  */
-fun isLatinSquare(matrix: Matrix<Int>): Boolean = TODO()
+fun isLatinSquare(matrix: Matrix<Int>): Boolean {
+    val foundInRow = Array(matrix.height) { BooleanArray(matrix.height) }
+    val foundInCol = Array(matrix.width) { BooleanArray(matrix.width) }
+    for (row in 0 until matrix.height) {
+        if (matrix.height != matrix.width)
+            return false
+        for (col in 0 until matrix.width) {
+            if (foundInRow[row][col - 1] || foundInCol[col][row - 1])
+                return false
+            foundInCol[col][row - 1] = true
+            foundInRow[row][col - 1] = foundInCol[col][row - 1]
+        }
+    }
+    return matrix.height == matrix.width
+}
 
 /**
  * Средняя

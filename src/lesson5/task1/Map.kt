@@ -2,6 +2,7 @@
 
 package lesson5.task1
 
+import kotlinx.html.attributes.stringSetDecode
 
 
 /**
@@ -116,7 +117,17 @@ fun mergePhoneBooks(mapA: Map<String, String>, mapB: Map<String, String>): Map<S
  *     -> mapOf(5 to listOf("Семён", "Михаил"), 3 to listOf("Марат"))
  */
 
-fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> = TODO()
+fun buildGrades(grades: Map<String, Int>): Map<Int, List<String>> {
+    val res = mutableMapOf<Int, List<String>>()
+    grades.forEach {
+        if (res[it.value] != null) res[it.value]!! + it.key
+        else listOf(it.key)
+    }
+    res.forEach {
+        res[it.key] = it.value
+    }
+    return res
+}
 
 /**
  * Простая
@@ -162,7 +173,17 @@ fun averageStockPrice(stockPrices: List<Pair<String, Double>>): Map<String, Doub
  *     "печенье"
  *   ) -> "Мария"
  */
-fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? = TODO()
+fun findCheapestStuff(stuff: Map<String, Pair<String, Double>>, kind: String): String? {
+    var price: Double? = null
+    var res: String? = null
+    stuff.forEach {
+        if (it.value.first == kind && (price == null || price!! > it.value.second)) {
+            price = it.value.second
+            res = it.key
+        }
+    }
+    return res
+}
 
 /**
  * Сложная
@@ -246,7 +267,13 @@ fun canBuildFrom(chars: List<Char>, word: String): Boolean {
  * Например:
  *   extractRepeats(listOf("a", "b", "a")) -> mapOf("a" to 2)
  */
-fun extractRepeats(list: List<String>): Map<String, Int> = TODO()
+fun extractRepeats(list: List<String>): Map<String, Int> {
+    val res = mutableMapOf<String, Int>()
+    list.forEach {
+        res[it] = (res[it] ?: 0) + 1
+    }
+    return res.filter { it.value != 1 }
+}
 
 /**
  * Средняя
@@ -284,7 +311,13 @@ fun hasAnagrams(words: List<String>): Boolean {
  *   findSumOfTwo(listOf(1, 2, 3), 4) -> Pair(0, 2)
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
-fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
+fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
+    list.forEach {
+        if (list.indexOf(it) != list.lastIndexOf(number - it) && number - it in list)
+            return Pair(list.indexOf(it), list.indexOf(number - it))
+    }
+    return Pair(-1, -1)
+}
 
 /**
  * Очень сложная
@@ -306,5 +339,9 @@ fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> = TODO()
  *   ) -> emptySet()
  */
 
-fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> = TODO()
-
+fun bagPacking(treasures: Map<String, Pair<Int, Int>>, capacity: Int): Set<String> {
+    for ((name, pair) in treasures) {
+        if (pair.first < capacity) return stringSetDecode(name)!!
+    }
+    return emptySet()
+}

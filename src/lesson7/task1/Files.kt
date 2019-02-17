@@ -91,7 +91,22 @@ fun sibilants(inputName: String, outputName: String) {
  *
  */
 fun centerFile(inputName: String, outputName: String) {
-    TODO()
+    val rd = File(inputName).bufferedReader()
+    val lines: List<String> = rd.readLines()
+    val writer = File(outputName).bufferedWriter()
+    var m = 0
+    for (line in lines) {
+        if (m < line.trim().length) {
+            m = line.trim().length
+        }
+    }
+    for (line in lines) {
+        val n = (m - line.trim().length) / 2
+        val res = " ".repeat(n) + line.trim()
+        writer.write(res)
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
@@ -122,7 +137,36 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val rd = File(inputName).bufferedReader()
+    val lines: List<String> = rd.readLines()
+    var m = 0
+    for (line in lines) {
+        if (m < line.trim().length) {
+            m = line.trim().length
+        }
+    }
+    for (line in lines) {
+        val words = line.trim().split(" ")
+        if (words.size > 2) {
+            val n = (m - line.trim().length) / (words.size - 1)
+            var space = (m - line.trim().length) - n * (words.size - 1)
+            for (i in 0..words.size - 2) {
+                writer.write(words[i])
+                if (space == 0) {
+                    writer.write(" ".repeat(n + 1))
+                } else {
+                    writer.write(" ".repeat(n + 2))
+                    space--
+                }
+            }
+            writer.write(words.last())
+        } else {
+            writer.write(line.trim())
+        }
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
@@ -148,8 +192,7 @@ fun top20Words(inputName: String): Map<String, Int> {
     val lines: List<String> = rd.readLines()
     val res = mutableMapOf<String, Int>()
     for (line in lines) {
-        val words: List<String> = line.toLowerCase().split("1", "2", "3", "4", "5", "6", "7", "8", "9", "0",
-                ";", ".", ",", " ", "=", "-", "+", "\\", "/", "*", "!", "?", ":")
+        val words: List<String> = line.toLowerCase().split("[^a-zа-яё]".toRegex())
         for (word in words) {
             if (word.isEmpty())
                 continue
@@ -227,7 +270,20 @@ fun transliterate(inputName: String, dictionary: Map<Char, String>, outputName: 
  * Обратите внимание: данная функция не имеет возвращаемого значения
  */
 fun chooseLongestChaoticWord(inputName: String, outputName: String) {
-    TODO()
+    val writer = File(outputName).bufferedWriter()
+    val rd = File(inputName).bufferedReader()
+    val lines: List<String> = rd.readLines()
+    var longest = 0
+    val res = mutableSetOf<String>()
+    for (line in lines) {
+        if (line.toLowerCase().length == line.toLowerCase().toSet().size) longest = line.length
+    }
+    for (line in lines) {
+        if (line.length == longest && line.toLowerCase().toSet().size == line.toLowerCase().length)
+            res.add(line)
+    }
+    writer.write(res.joinToString(", "))
+    writer.close()
 }
 
 /**
